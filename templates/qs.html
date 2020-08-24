@@ -1,0 +1,96 @@
+{% extends "layout.html" %}
+
+    {%block content%}
+
+        <script type="text/javascript">
+                function download(filename, text) {
+                    var element = document.createElement('a');
+                    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+                    element.setAttribute('download', filename);
+
+                    element.style.display = 'none';
+                    document.body.appendChild(element);
+
+                    element.click();
+
+                    document.body.removeChild(element);
+                }
+
+            function saveq(x)
+            {
+                var i = x-1;
+                var tmp="";
+                for(j=0; j<i; j++)
+                {
+                    var checkBox = document.getElementById(j.toString());
+                    if(checkBox.checked == true)
+                    {
+                        var questions = document.getElementsByName(j.toString());
+                        if(questions.length ==5)
+                        {
+                            tmp = tmp + (j+1).toString() + "-" + questions[0].value.toUpperCase() + "\n"
+                            tmp = tmp + "(a)" + questions[1].value.toUpperCase() + "\n"
+                            tmp = tmp + "(b)" + questions[2].value.toUpperCase() + "\n"
+                            tmp = tmp + "(c)" + questions[3].value.toUpperCase() + "\n"
+                            tmp = tmp + "(d)" + questions[4].value.toUpperCase() + "\n"
+                        }
+                        else
+                        {
+                            tmp = tmp + (j+1).toString() + "-" + questions[0].value.toUpperCase() + "\n"
+                            tmp = tmp + "(a)" + questions[1].value.toUpperCase() + "\n" + "\n"
+                            tmp = tmp + "(b)" + questions[2].value.toUpperCase() + "\n" + "\n"
+                        }
+
+                    }
+                }
+                download("questions.txt", tmp)
+            }
+        </script>
+        <h1>Modified qs Page</h1>
+        <br>
+        <br>
+        <p>#Questions: {{Qnums}}</p>
+    {% set ns1 = namespace(qs_cnt=0) %}
+
+<script type="text/javascript">
+        function selectAll() {
+            var items = document.getElementsByName('quest');
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].type == 'checkbox')
+                    items[i].checked = true;
+            }
+        }
+
+        function UnSelectAll() {
+            var items = document.getElementsByName('quest');
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].type == 'checkbox')
+                    items[i].checked = false;
+            }
+        }
+</script>
+
+      <input type="button" onclick='selectAll()' value="Select All"/>
+      <input type="button" onclick='UnSelectAll()' value="Unselect All"/>
+<br>
+
+
+    <form method="post" action="">
+    {% for q in questions %}
+      <div width="10px">
+          <input type="checkbox" name="quest" id="{{ns1.qs_cnt}}"> {{ns1.qs_cnt+1}}
+            <input type="text" size="60"  flex-wrap="wrap" name="{{ns1.qs_cnt}}" value="{{q[0]}}" >
+            <br><br>
+            {%for d in q[1]%}
+              &emsp;  <input type="text" size="30" flex-wrap="wrap" name="{{ns1.qs_cnt}}" value="{{d}}" ><br>
+            {%endfor%}
+      </div>
+        {%set ns1.qs_cnt = ns1.qs_cnt+1%}
+        <br>
+    {% endfor %}
+        <input type="button" value="Download" onclick="saveq({{ns1.qs_cnt+1}})"/>
+    </form>
+
+    {%endblock%}
+
+

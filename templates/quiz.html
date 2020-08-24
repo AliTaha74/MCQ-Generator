@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{%block content%}
+        <h1>Modified Quiz Page</h1>
+        <br>
+        <br>
+        <p>#Questions: {{Qnums}}</p>
+    {% for q in questions %}
+      <div width="10px">
+            <label>{{q[0]}}</label>
+        <br>
+        {%for d in q[1]%}
+            <input type="radio" value="{{d}}">
+            <label>{{d}}</label>
+        {%endfor%}
+      </div>
+    {% endfor %}
+        <input type="submit" value="Submit" />
+    {%endblock%}
